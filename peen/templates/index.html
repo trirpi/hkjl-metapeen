@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HKJL Metapeen</title>
+</head>
+<body>
+    <h1>HkJl MeTaPeEn FiGhT</h1>
+    <table border="1">
+        <tr>
+            <th>RaNk</th>
+            <th>ScOrE</th>
+            <th>PeRsOoN</th>
+            <th>DeTaIlS</th>
+        </tr>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.get_rank() }}</td>
+                <td>{{ user.get_score() }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.id }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
