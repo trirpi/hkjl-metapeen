@@ -1,7 +1,8 @@
+from werkzeug.security import check_password_hash, generate_password_hash
+from sqlalchemy.ext.mutable import Mutable
+
 from peen import db
 import site_weights
-
-from sqlalchemy.ext.mutable import Mutable
 
 
 class MutableDict(Mutable, dict):
@@ -33,15 +34,10 @@ class MutableDict(Mutable, dict):
 class Hacker(db.Model):
     """Metapeen user with all his scores."""
 
-    __tablename__ = 'users'
+    __tablename__ = 'hackers'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String)
     scores = db.Column(MutableDict.as_mutable(db.PickleType))
-
-    def get_rank(self):
-        scores = [(x.username, x.get_score()) for x in Hacker.query.all()]  # this is a list of tuples so it can be sorted easily
-        sorted_scores = dict(scores.sort(key=lambda x: x[1]))
-        return sorted_scores[self.username]
 
     def get_info(self, site, info=None, relative=False):
         """
@@ -64,7 +60,7 @@ class Hacker(db.Model):
                 }
                 if relative:
                     return int(round(self.scores[site][callbacks[info]]*site_weights.callbacks[site]))  # apply weights and round to nearest integer
-                return self.scores[site][callbacks[info]]
+                return self.scores[site][callbacks[info]]  # same without weights
 
         except KeyError:
             return None
@@ -73,9 +69,34 @@ class Hacker(db.Model):
         return sum([int(x[1]) for x in list(self.scores.values())])
 
     def __repr__(self):
-        return "<User(id='{}', username='{}')".format(self.id, self.username)
+        return "<Hacker(id='{}', username='{}')".format(self.id, self.username)
 
 
 class User(db.Model):
     """ This is the admin user """
 
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String)
+    password = db.Column(db.String)
+
+    @property
+    def is_authenticated(self):
+        return True
+
+    @property
+    def is_active(self):
+        return True
+
+    @property
+    def is_anonymous(self):
+        return False  # application doesn't support anonymous users
+
+    def set_password(self, new_password):
+        self.password = generate_password_hash(new_password)
+
+    def check_password(self, password):
+        check_password_hash(self.password, password)
+
+    def __repr__(self):
+        return "<User(id='{}', username='{}')".format(self.id, self.username)

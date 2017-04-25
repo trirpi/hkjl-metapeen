@@ -10,18 +10,6 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    """handles user login on form"""
-    if request.method == 'GET':
-        return render_template('login.html')
-    if request.method == 'POST':
-        user = User.query.filter_by(username=request).first()
-        login_user(user, remember=True)
-
-        flash('Logged in successfully.')
-        return redirect(url_for('index'))
-    return render_template('login.html')
 
 
 @app.route('/')
