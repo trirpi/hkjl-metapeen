@@ -30,15 +30,22 @@ callbacks = {
 }
 
 
-def update_score(username, site):
-    user = Hacker.query.filter_by(username=username).first()  # get correct user
+def update_score(user, site=None):
+    """
+    update scores of a user
+    :param user: User class
+    :param site: site that needs to be updated (if none it updates all scores)
+    :return: nothing
+    """
     scores = user.scores  # list with username/id and current score
+    if site is None:
+        for site_key in scores:
 
-    score = callbacks[site](scores[site][0])  # get score
+            score = callbacks[site_key](scores[site_key][0])  # get score
+            user.scores[site_key] = (user.scores[site_key][0], score)  # set new values
+    else:
+        score = callbacks[site](scores[site][0])  # get score
+        user.scores[site] = (user.scores[site][0], score)  # set new values
 
-    user = Hacker.query.filter_by(username=username).first()  # get correct user
-    user.scores[site] = (user.scores[site][0], score)  # set new values
     db.session.commit()  # and put them in the db
-
-update_score('trirpi', 'cs')
 
