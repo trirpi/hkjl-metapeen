@@ -34,15 +34,29 @@ def login():
         flash('Incorrect credentials.')
     return render_template('login.html', token_csrf=generate_csrf_token())
 
+
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('index'))
 
 
-@app.route('/admin', methods=['GET', 'POST'])
+@app.route('/admin')
 @login_required
 def admin():
     """main admin page"""
     return render_template('admin.html')
 
+
+@app.route('/edit_admins', methods=['GET', 'POST'])
+@login_required
+def edit_admins():
+    """page where you can edit admins"""
+    return render_template('edit_admins.html', admins=User.query.all())
+
+
+@app.route('/edit_hackers', methods=['GET', 'POST'])
+@login_required
+def edit_hackers():
+    """page where you can edit hackers"""
+    return render_template('edit_hackers.html', hackers=Hacker.query.all())
