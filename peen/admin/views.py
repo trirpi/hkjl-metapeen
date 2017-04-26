@@ -28,7 +28,6 @@ def login():
         user = User.query.filter_by(username=request.form.get('username')).first()
         if user:
             if user.check_password(request.form.get('password')):
-                # handle
                 login_user(user)
                 flash('Logged in successfully.')
                 return redirect(url_for('admin'))
