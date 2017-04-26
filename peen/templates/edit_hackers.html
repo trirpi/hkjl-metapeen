@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit hackers - MeTaPeEn</title>
+</head>
+<body>
+    <h1>Edit hackers</h1>
+    <h2>Hackers: </h2>
+    <table border="1">
+        <tr>
+            <th>id</th>
+            <th>username</th>
+            <th>extra</th>
+        </tr>
+        {% for hacker in hackers %}
+            <tr>
+                <td>{{ hacker.id }}</td>
+                <td>{{ hacker.username }}</td>
+                <td>{{ hacker.scores }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
