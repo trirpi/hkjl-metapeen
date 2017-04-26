@@ -5,11 +5,23 @@
     <title>Login - MeTaPeEn</title>
 </head>
 <body>
+    <!-- flashed messages like 'password incorrect -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <!-- login form -->
     <form method="post" name="login">
-        <input type="text" placeholder="username"><br>
-        <input type="password" placeholder="password"><br>
+        <input name="username" type="text" placeholder="username"><br>
+        <input name="password" type="password" placeholder="password"><br>
         <input type="submit" value="login">
-        <input type="reset" value="reset">
+        <input name="token_csrf" type="hidden" value="{{ token_csrf }}">
     </form>
 </body>
 </html>
