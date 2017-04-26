@@ -92,6 +92,9 @@ class User(db.Model):
     def is_anonymous(self):
         return False  # application doesn't support anonymous users
 
+    def get_id(self):
+        return self.id
+
     def set_password(self, new_password):
         self.password = generate_password_hash(new_password)
 
