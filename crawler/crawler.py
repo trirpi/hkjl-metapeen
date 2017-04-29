@@ -1,20 +1,21 @@
 from bs4 import BeautifulSoup
 import requests
 
-from crawler_config import profile_urls
-from crawler import crawl_functions
+from crawler_config import profile_urls, login_urls
+import credentials
+import crawl_functions
 from peen import db
 
 
 class Crawler(object):
     """
-    crawler class, that can crawl different site for specific users
+    Crawler class, that can crawl different site for specific users
     """
     def __init__(self):
         pass
 
     @staticmethod
-    def get_profile_url(self, site, username):
+    def get_profile_url(site, username):
         """Get url of hacker profile page from specific site"""
         return profile_urls[site].format(username)
 
@@ -26,11 +27,15 @@ class Crawler(object):
         :return: exact score that the user has on the site
         :rtype: int
         """
+        with requests.Session() as session:
+            if site in login_urls:  # you need to login to access points
+                session.post(login_urls[site], credentials.callbacks[site])
 
-        url = self.get_profile_url(self, site, username)
-        request = requests.get(url).content, "html.parser"
-        bs_response = BeautifulSoup(request)  # convert to BeautifulSoup response
+            # get the profile page where the scores are on
+            url = self.get_profile_url(site, username)
+            request = session.get(url).content
 
+        bs_response = BeautifulSoup(request, "html.parser")  # convert to BeautifulSoup response
         score = crawl_functions.callbacks[site](bs_response)  # get score
         return score
 
@@ -46,7 +51,8 @@ class Crawler(object):
         
         >>> from peen.orm.models import Hacker
         >>> hacker = Hacker.query.filter_by(username='henk').first()
-        >>> update_score(hacker, site='rm')
+        >>> crawler_instance = Crawler()
+        >>> crawler_instance.update_score(hacker, site='rm')
         """
         scores = hacker.scores  # list with username/id and current score
         username = hacker.username
@@ -60,4 +66,6 @@ class Crawler(object):
 
         db.session.commit()  # and put them in the db
 
-
+if __name__ == '__main__':
+    crawl = Crawler()
+    print(crawl.get_score('ht', 'trirpi'))
