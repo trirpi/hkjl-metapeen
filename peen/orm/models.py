@@ -2,7 +2,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy.ext.mutable import Mutable
 
 from peen import db
-import site_weights
+import crawler_config
 
 
 class MutableDict(Mutable, dict):
@@ -50,7 +50,7 @@ class Hacker(db.Model):
         try:
             if not info:
                 if relative:
-                    scores = [self.scores[site][0], int(round(site_weights.callbacks[site]*self.scores[site][1]))]  # apply weights to list + round to nearest integer
+                    scores = [self.scores[site][0], int(round(crawler_config.callbacks[site] * self.scores[site][1]))]  # apply weights to list + round to nearest integer
                     return scores
                 return self.scores[site]  # just return the list without weights
             else:
@@ -59,7 +59,7 @@ class Hacker(db.Model):
                     'score': 1
                 }
                 if relative:
-                    return int(round(self.scores[site][callbacks[info]]*site_weights.callbacks[site]))  # apply weights and round to nearest integer
+                    return int(round(self.scores[site][callbacks[info]] * crawler_config.callbacks[site]))  # apply weights and round to nearest integer
                 return self.scores[site][callbacks[info]]  # same without weights
 
         except KeyError:

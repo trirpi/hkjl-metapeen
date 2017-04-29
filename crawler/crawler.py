@@ -1,68 +1,63 @@
 from bs4 import BeautifulSoup
 import requests
-import re
 
+from crawler_config import profile_urls
+from crawler import crawl_functions
 from peen import db
 
 
-def get_score_rm(username):
-    profile_url = 'https://root-me.org/{user}'.format(user=username)
-
-    response = BeautifulSoup(requests.get(profile_url).content, "html.parser")  # get webpage in right format
-    try:
-        score = response.find_all("div", class_="t-body")[0].contents[5].contents[5].contents[1].text
-        return int(score)
-    except IndexError:
-        return None
-
-
-def get_score_cs(cs_id):
-    profile_url = 'https://certifiedsecure.nl/profile/{cs_id}'.format(cs_id=cs_id)
-
-    response = BeautifulSoup(requests.get(profile_url).content, "html.parser")  # get webpage in right format
-    try:
-        score = re.findall(r'\d+', response.find_all("div", class_="level_progress_details")[0].text)[1]
-        return int(score)
-    except IndexError:
-        return None
-
-
-def get_score_otw(wechall_username):
-    profile_url = 'https://www.wechall.net/profile/{wechall_username}'.format(wechall_username=wechall_username)
-
-    response = BeautifulSoup(requests.get(profile_url).content, "html.parser")
-    table = response.find_all("table")[1]
-    for words in table.contents:
-        if 'OverTheWire.org' in str(words):
-            try:
-                return int(re.findall(r'\d+', str(words.contents[2]))[0])
-            except IndexError:  # niet gevonden ofzo
-                return None
-
-
-callbacks = {
-    'rm': get_score_rm,
-    'cs': get_score_cs,
-    'otw': get_score_otw
-}
-
-
-def update_score(hacker, site=None):
+class Crawler(object):
     """
-    update scores of a user
-    :param hacker: Hacker class instance
-    :param site: site that needs to be updated (if none it updates all scores)
-    :return: nothing
+    crawler class, that can crawl different site for specific users
     """
-    scores = hacker.scores  # list with username/id and current score
-    if site is None:
-        for site_key in scores:
+    def __init__(self):
+        pass
 
-            score = callbacks[site_key](scores[site_key][0])  # get score
-            hacker.scores[site_key] = (hacker.scores[site_key][0], score)  # set new values
-    else:
-        score = callbacks[site](scores[site][0])  # get score
-        hacker.scores[site] = (hacker.scores[site][0], score)  # set new values
+    @staticmethod
+    def get_profile_url(self, site, username):
+        """Get url of hacker profile page from specific site"""
+        return profile_urls[site].format(username)
 
-    db.session.commit()  # and put them in the db
+    def get_score(self, site, username):
+        """
+        Scrapes score of sites
+        :param site: accepts string with site abbreviation
+        :param username: the username of user
+        :return: exact score that the user has on the site
+        :rtype: int
+        """
+
+        url = self.get_profile_url(self, site, username)
+        request = requests.get(url).content, "html.parser"
+        bs_response = BeautifulSoup(request)  # convert to BeautifulSoup response
+
+        score = crawl_functions.callbacks[site](bs_response)  # get score
+        return score
+
+    def update_score(self, hacker, site=None):
+        """
+        update scores of a user
+        :param hacker: person whose score should be updated
+        :type hacker: Hacker class instance
+        :param site: site that needs to be updated (if none it updates all scores)
+        :return: None
+        
+        :Example:
+        
+        >>> from peen.orm.models import Hacker
+        >>> hacker = Hacker.query.filter_by(username='henk').first()
+        >>> update_score(hacker, site='rm')
+        """
+        scores = hacker.scores  # list with username/id and current score
+        username = hacker.username
+        if site is None:  # update scores of all sites the user has
+            for site_key in scores:
+                score = self.get_score(site_key, username)  # get score
+                hacker.scores[site_key] = [hacker.scores[site_key][0], score]  # set new values
+        else:  # update the specific site
+            score = self.get_score(site, username)  # get score
+            hacker.scores[site] = (hacker.scores[site][0], score)  # set new values
+
+        db.session.commit()  # and put them in the db
+
 
