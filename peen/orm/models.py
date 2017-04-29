@@ -50,7 +50,7 @@ class Hacker(db.Model):
         try:
             if not info:
                 if relative:
-                    scores = [self.scores[site][0], int(round(crawler_config.callbacks[site] * self.scores[site][1]))]  # apply weights to list + round to nearest integer
+                    scores = [self.scores[site][0], int(round(crawler_config.site_weights[site] * self.scores[site][1]))]  # apply weights to list + round to nearest integer
                     return scores
                 return self.scores[site]  # just return the list without weights
             else:
@@ -59,7 +59,7 @@ class Hacker(db.Model):
                     'score': 1
                 }
                 if relative:
-                    return int(round(self.scores[site][callbacks[info]] * crawler_config.callbacks[site]))  # apply weights and round to nearest integer
+                    return int(round(self.scores[site][callbacks[info]] * crawler_config.site_weights[site]))  # apply weights and round to nearest integer
                 return self.scores[site][callbacks[info]]  # same without weights
 
         except KeyError:

@@ -26,8 +26,13 @@ def otw(response):
             return int(re.findall(r'\d+', str(words.contents[2]))[0])
 
 
+def ht(response):
+    return response# .find_all("span", class_="right")
+
+
 callbacks = {
     'rm': rm,
     'cs': cs,
-    'otw': otw
+    'otw': otw,
+    'ht': ht,
 }
