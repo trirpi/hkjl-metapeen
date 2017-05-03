@@ -38,42 +38,43 @@ class Hacker(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String)
     scores = db.Column(MutableDict.as_mutable(db.PickleType))
+    total_score = db.Column(db.Integer)  # total score with weights
 
-    def get_info(self, site, info=None, relative=False):
+    def get_score(self, site, relative=False):
         """
-        Get score and/of username about specific site.
+        Get score about specific site.
         :param site: short name for site (e.g. 'ht')
-        :param info: 'name' or 'score' (empty for a list of both)
         :param relative: uses site_weights to determine how many points for the ranking it uses
-        :return: score/username of site
+        :return: score of site
         """
-        try:
-            if not info:
-                if relative:
-                    scores = [self.scores[site][0], int(round(crawler_config.site_weights[site] * self.scores[site][1]))]  # apply weights to list + round to nearest integer
-                    return scores
-                return self.scores[site]  # just return the list without weights
-            else:
-                callbacks = {
-                    'name': 0,
-                    'score': 1
-                }
-                if relative:
-                    return int(round(self.scores[site][callbacks[info]] * crawler_config.site_weights[site]))  # apply weights and round to nearest integer
-                return self.scores[site][callbacks[info]]  # same without weights
+        place_of_score = 1
+        if relative:
+            score = self.scores[site][place_of_score] * crawler_config.site_weights[site]  # apply weights to score
+            return score
+        else:
+            return self.scores[site][place_of_score]
 
-        except KeyError:
-            return None
+    def update_score(self, site, score):
+        """Update score without weights from site."""
+        self.scores[site] = [self.scores[site][0], score]  # set new values
 
-    def get_score(self):
-        return sum([int(x[1]) for x in list(self.scores.values())])
+    def update_total_score(self):
+        """Update total score of all sites with weights."""
+        total_score = 0
+        for score_site in self.scores:
+            total_score += self.get_score(score_site, relative=True)
+        self.total_score = total_score
+        db.session.commit()
+
+    def add_site(self, site, username):
+        self.scores[site] = [username, 0]
 
     def __repr__(self):
         return "<Hacker(id='{}', username='{}')".format(self.id, self.username)
 
 
 class User(db.Model):
-    """ This is the admin user """
+    """The admin user"""
 
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)

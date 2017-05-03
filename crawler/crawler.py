@@ -3,7 +3,7 @@ import requests
 
 from crawler_config import profile_urls, login_urls
 import credentials
-import crawl_functions
+from crawler import crawl_functions
 from peen import db
 
 
@@ -29,7 +29,7 @@ class Crawler(object):
         """
         with requests.Session() as session:
             if site in login_urls:  # you need to login to access points
-                session.post(login_urls[site], credentials.callbacks[site])
+                g = session.post(login_urls[site], credentials.callbacks[site])
 
             # get the profile page where the scores are on
             url = self.get_profile_url(site, username)
@@ -39,32 +39,33 @@ class Crawler(object):
         score = crawl_functions.callbacks[site](bs_response)  # get score
         return score
 
-    def update_score(self, hacker, site=None):
-        """
-        update scores of a user
-        :param hacker: person whose score should be updated
-        :type hacker: Hacker class instance
-        :param site: site that needs to be updated (if none it updates all scores)
-        :return: None
-        
-        :Example:
-        
-        >>> from peen.orm.models import Hacker
-        >>> hacker = Hacker.query.filter_by(username='henk').first()
-        >>> crawler_instance = Crawler()
-        >>> crawler_instance.update_score(hacker, site='rm')
-        """
-        scores = hacker.scores  # list with username/id and current score
-        username = hacker.username
-        if site is None:  # update scores of all sites the user has
-            for site_key in scores:
-                score = self.get_score(site_key, username)  # get score
-                hacker.scores[site_key] = [hacker.scores[site_key][0], score]  # set new values
-        else:  # update the specific site
-            score = self.get_score(site, username)  # get score
-            hacker.scores[site] = (hacker.scores[site][0], score)  # set new values
 
-        db.session.commit()  # and put them in the db
+def update_score(hacker, site=None):
+    """
+    Update scores of a user.
+    :param hacker: person whose score should be updated
+    :type hacker: Hacker class instance
+    :param site: site that needs to be updated (if none it updates all scores)
+    :return: None
+    
+    :Example:
+    
+    >>> from peen.orm.models import Hacker
+    >>> hacker = Hacker.query.filter_by(username='henk').first()
+    >>> update_score(hacker, site='rm')
+    """
+    crawler = Crawler()
+    scores = hacker.scores  # list with username/id and current score
+    username = hacker.username
+    if site is None:  # update scores of all sites the user has
+        for site_key in scores:
+            score = crawler.get_score(site_key, username)  # get score
+            hacker.update_score(site_key, score)  # set new values
+    else:  # update the specific site
+        score = crawler.get_score(site, username)  # get score
+        hacker.update_score(site, score)  # set new values
+
+    db.session.commit()  # and put them in the db
 
 if __name__ == '__main__':
     crawl = Crawler()
