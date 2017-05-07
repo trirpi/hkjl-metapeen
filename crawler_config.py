@@ -23,5 +23,5 @@ profile_urls = {
 
 
 login_urls = {
-    'ht': 'https://www.hackthis.co.uk/auth.php?login}'
+    'ht': 'https://www.hackthis.co.uk/auth.php?login'
 }
