@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template
 
 from peen import app, lm
 from peen.orm.models import User, Hacker

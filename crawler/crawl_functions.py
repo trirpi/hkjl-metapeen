@@ -27,8 +27,9 @@ def otw(response):
 
 
 def ht(response):
-    return response# .find_all("span", class_="right")
-
+    spans = response.find_all("span", class_="right")
+    score = spans[0].contents[0]
+    return int(score)
 
 callbacks = {
     'rm': rm,

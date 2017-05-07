@@ -27,13 +27,13 @@ class Crawler(object):
         :return: exact score that the user has on the site
         :rtype: int
         """
-        with requests.Session() as session:
-            if site in login_urls:  # you need to login to access points
-                g = session.post(login_urls[site], credentials.callbacks[site])
+        with requests.Session() as crawl_session:
+            # if site in login_urls:  # you need to login to access points
+            crawl_session.post(login_urls[site], credentials.callbacks[site])
 
             # get the profile page where the scores are on
             url = self.get_profile_url(site, username)
-            request = session.get(url).content
+            request = crawl_session.get(url).content
 
         bs_response = BeautifulSoup(request, "html.parser")  # convert to BeautifulSoup response
         score = crawl_functions.callbacks[site](bs_response)  # get score
@@ -66,7 +66,3 @@ def update_score(hacker, site=None):
         hacker.update_score(site, score)  # set new values
 
     db.session.commit()  # and put them in the db
-
-if __name__ == '__main__':
-    crawl = Crawler()
-    print(crawl.get_score('ht', 'trirpi'))
