@@ -1,43 +1,18 @@
-from bs4 import BeautifulSoup
-import requests
-
-from crawler_config import profile_urls, login_urls
-import credentials
-from crawler import crawl_functions
 from peen import db
 
+from crawler.cs_crawler import CSCrawler
+from crawler.ht_crawler import HTCrawler
+from crawler.otw_crawler import OTWCrawler
+from crawler.rm_crawler import RMCrawler
+from crawler.hts_crawler import HTSCrawler
 
-class Crawler(object):
-    """
-    Crawler class, that can crawl different site for specific users
-    """
-    def __init__(self):
-        pass
-
-    @staticmethod
-    def get_profile_url(site, username):
-        """Get url of hacker profile page from specific site"""
-        return profile_urls[site].format(username)
-
-    def get_score(self, site, username):
-        """
-        Scrapes score of sites
-        :param site: accepts string with site abbreviation
-        :param username: the username of user
-        :return: exact score that the user has on the site
-        :rtype: int
-        """
-        with requests.Session() as crawl_session:
-            # if site in login_urls:  # you need to login to access points
-            crawl_session.post(login_urls[site], credentials.callbacks[site])
-
-            # get the profile page where the scores are on
-            url = self.get_profile_url(site, username)
-            request = crawl_session.get(url).content
-
-        bs_response = BeautifulSoup(request, "html.parser")  # convert to BeautifulSoup response
-        score = crawl_functions.callbacks[site](bs_response)  # get score
-        return score
+crawler_callbacks = {
+    'cs': CSCrawler,
+    'otw': OTWCrawler,
+    'ht': HTCrawler,
+    'rm': RMCrawler,
+    'hts': HTSCrawler
+}
 
 
 def update_score(hacker, site=None):
@@ -47,22 +22,26 @@ def update_score(hacker, site=None):
     :type hacker: Hacker class instance
     :param site: site that needs to be updated (if none it updates all scores)
     :return: None
-    
+
     :Example:
-    
+
     >>> from peen.orm.models import Hacker
     >>> hacker = Hacker.query.filter_by(username='henk').first()
     >>> update_score(hacker, site='rm')
     """
-    crawler = Crawler()
     scores = hacker.scores  # list with username/id and current score
     username = hacker.username
+
     if site is None:  # update scores of all sites the user has
         for site_key in scores:
-            score = crawler.get_score(site_key, username)  # get score
+            crawler = crawler_callbacks[site_key](username)  # create crawler instance for specific user
+            score = crawler.get_score()  # get score
+
             hacker.update_score(site_key, score)  # set new values
     else:  # update the specific site
-        score = crawler.get_score(site, username)  # get score
+        crawler = crawler_callbacks[site](username)  # create crawler instance for specific user with the correct site
+        score = crawler.get_score()  # get score
+
         hacker.update_score(site, score)  # set new values
 
     db.session.commit()  # and put them in the db
