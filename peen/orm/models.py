@@ -68,6 +68,7 @@ class Hacker(db.Model):
 
     def add_site(self, site, username):
         self.scores[site] = [username, 0]
+        db.session.commit()
 
     def __repr__(self):
         return "<Hacker(id='{}', username='{}')".format(self.id, self.username)
