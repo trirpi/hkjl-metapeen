@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 
-from crawler_config import profile_urls, login_urls
+from crawler.config import profile_urls, login_urls
 import credentials
 
 
@@ -13,8 +13,9 @@ class BaseCrawler(object):
         self.profile_url = self.get_profile_url(username)
 
     @staticmethod
-    def get_profile_url(site, username):
+    def get_profile_url(username):
         """Get url of hacker profile page from specific site."""
+
         return profile_urls[site].format(username)
 
     def get_page_content(self, site):
