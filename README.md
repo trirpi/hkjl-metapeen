@@ -2,18 +2,23 @@
 
 ### To start the development server
 Create virtual evironment.
+
 1. virtualenv metapeen
 2. source metapeen/bin/activate
 
 Install dependencies.
+
 3. python setup.py develop
 
-Create database.
-4. 
+Create database and admin.
+
+4. python create_db.py
+5. python create_admin.py
 
 Start Flask.
-4. export FLASK_APP=peen
-5. flask run
+
+6. export FLASK_APP=peen
+7. flask run
 
 Use gunicorn or gevent in production. (See: http://flask.pocoo.org/docs/0.10/deploying/)
 
