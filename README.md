@@ -1,12 +1,18 @@
 # HKJL METAPEEN
 
 ### To start the development server
-1. touch credentials.py
-2. virtualenv metapeen
+Create virtual evironment.
+1. virtualenv metapeen
 2. source metapeen/bin/activate
-3. 
-2. export FLASK_APP=peen
-4. pip install -e
+
+Install dependencies.
+3. python setup.py develop
+
+Create database.
+4. 
+
+Start Flask.
+4. export FLASK_APP=peen
 5. flask run
 
 Use gunicorn or gevent in production. (See: http://flask.pocoo.org/docs/0.10/deploying/)
