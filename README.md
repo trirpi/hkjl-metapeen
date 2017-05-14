@@ -1,24 +1,30 @@
 # HKJL METAPEEN
 
 ### To start the development server
+
+Clone project.
+
+1. git clone https://github.com/trirpi/hkjl-metapeen
+2. cd hkjl-metapeen
+
 Create virtual evironment.
 
-1. virtualenv metapeen
-2. source metapeen/bin/activate
+3. virtualenv metapeen
+4. source metapeen/bin/activate
 
 Install dependencies.
 
-3. python setup.py develop
+5. python setup.py develop
 
 Create database and admin.
 
-4. python create_db.py
-5. python create_admin.py
+6. python create_db.py
+7. python create_admin.py
 
 Start Flask.
 
-6. export FLASK_APP=peen
-7. flask run
+8. export FLASK_APP=peen
+9. flask run
 
 Use gunicorn or gevent in production. (See: http://flask.pocoo.org/docs/0.10/deploying/)
 

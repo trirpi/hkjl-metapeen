@@ -9,7 +9,7 @@ setup(
     packages=['crawler', 'crawler'],
     include_package_data=False,
     install_requires=[
-        'flask',
+        'Flask',
         'flask-sqlalchemy',
         'flask-login',
         'bs4',
