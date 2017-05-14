@@ -6,11 +6,12 @@ from setuptools import setup
 
 setup(
     name='metapeen',
-    packages=['admin', 'crawler'],
+    packages=['crawler', 'crawler'],
     include_package_data=False,
     install_requires=[
         'flask',
         'flask-sqlalchemy',
+        'flask-login',
         'bs4',
         'requests'
     ]

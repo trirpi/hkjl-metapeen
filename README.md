@@ -2,8 +2,10 @@
 
 ### To start the development server
 1. touch credentials.py
+2. virtualenv metapeen
+2. source metapeen/bin/activate
+3. 
 2. export FLASK_APP=peen
-3. export DEBUG=true
 4. pip install -e
 5. flask run
 
@@ -12,8 +14,8 @@ Use gunicorn or gevent in production. (See: http://flask.pocoo.org/docs/0.10/dep
 
 #### Exemple credentials.py
 
-    hts = { 
-        'username': 'trirpi',
+    ht = { 
+        'username': 'fgt123',
         'hts_password': 'okeisgoed'
     }
 
