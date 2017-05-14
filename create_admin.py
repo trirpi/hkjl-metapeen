@@ -6,7 +6,7 @@ from peen import db
 admin_name = ''
 admin_pass = ''
 
-if sys.version.info >= (3, 0):
+if sys.version_info >= (3, 0):
     admin_name = input('Admin name: ')
     admin_pass = input('Admin password: ')
 else:
