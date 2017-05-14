@@ -1,34 +1,8 @@
 from werkzeug.security import check_password_hash, generate_password_hash
-from sqlalchemy.ext.mutable import Mutable
+from sqlalchemy.ext.mutable import MutableDict
 
 from peen import db
-import crawler_config
-
-
-class MutableDict(Mutable, dict):
-    """Class that makes PickleType detect changes."""
-    @classmethod
-    def coerce(cls, key, value):
-        if not isinstance(value, MutableDict):
-            if isinstance(value, dict):
-                return MutableDict(value)
-            return Mutable.coerce(key, value)
-        else:
-            return value
-
-    def __delitem(self, key):
-        dict.__delitem__(self, key)
-        self.changed()
-
-    def __setitem__(self, key, value):
-        dict.__setitem__(self, key, value)
-        self.changed()
-
-    def __getstate__(self):
-        return dict(self)
-
-    def __setstate__(self, state):
-        self.update(self)
+import site_weights
 
 
 class Hacker(db.Model):
@@ -37,8 +11,14 @@ class Hacker(db.Model):
     __tablename__ = 'hackers'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String)
-    scores = db.Column(MutableDict.as_mutable(db.PickleType))
+    scores = db.Column(MutableDict.as_mutable(db.PickleType))  # mutable so it auto detects changes
     total_score = db.Column(db.Integer)  # total score with weights
+
+    def __init__(self, username):
+        self.username = username
+        self.scores = {}  # create dictionary
+        db.session.commit()
+        self.update_total_score()
 
     def get_score(self, site, relative=False):
         """
@@ -49,7 +29,7 @@ class Hacker(db.Model):
         """
         place_of_score = 1
         if relative:
-            score = self.scores[site][place_of_score] * crawler_config.site_weights[site]  # apply weights to score
+            score = self.scores[site][place_of_score] * site_weights.site_weights[site]  # apply weights to score
             return score
         else:
             return self.scores[site][place_of_score]

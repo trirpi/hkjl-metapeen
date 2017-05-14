@@ -45,3 +45,7 @@ def update_score(hacker, site=None):
         hacker.update_score(site, score)  # set new values
 
     db.session.commit()  # and put them in the db
+
+
+def update_total_score(hacker):
+    hacker.update_total_score()
