@@ -10,5 +10,7 @@ profile_urls = {
     'cs': 'https://certifiedsecure.nl/profile/{}',
     'otw': 'https://www.wechall.net/profile/{}',
     'hts': 'https://www.hackthissite.org/user/view/{}',
-    'ht': 'https://www.hackthis.co.uk/user/{}'
+    'ht': 'https://www.hackthis.co.uk/user/{}',
+    'pk': 'http://pwnable.kr/rank.php/',
+    'nf': 'https://www.net-force.nl/members/view/{}'
 }
