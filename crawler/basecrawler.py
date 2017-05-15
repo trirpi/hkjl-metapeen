@@ -9,14 +9,14 @@ class BaseCrawler(object):
     """
     Crawler class, that can crawl different site for specific users
     """
-    def __init__(self, username):
-        self.profile_url = self.get_profile_url(username)
+    site = ''
 
-    @staticmethod
-    def get_profile_url(username):
+    def __init__(self, hacker):
+        self.profile_url = self.get_profile_url(hacker.get_username(self.site))
+
+    def get_profile_url(self, username):
         """Get url of hacker profile page from specific site."""
-
-        return profile_urls[site].format(username)
+        return profile_urls[self.site].format(username)
 
     def get_page_content(self, site):
         """

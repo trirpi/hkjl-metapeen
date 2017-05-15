@@ -34,6 +34,14 @@ class Hacker(db.Model):
         else:
             return self.scores[site][place_of_score]
 
+    def get_username(self, site):
+        """Get username specific to a site"""
+        place_of_username = 0
+        if site in self.scores.keys():
+            return self.scores[site][place_of_username]
+        else:
+            return None
+
     def update_score(self, site, score):
         """Update score without weights from site."""
         self.scores[site] = [self.scores[site][0], score]  # set new values

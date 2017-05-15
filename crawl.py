@@ -5,6 +5,8 @@ from peen.orm.models import Hacker
 
 hackers = Hacker.query.all()
 
+
 for hacker in hackers:
-    update_all_scores(hacker)
-    update_total_score(hacker)
+    if hacker.username == 'aczid' or hacker.username == 'sling':
+        update_all_scores(hacker)
+        update_total_score(hacker)
