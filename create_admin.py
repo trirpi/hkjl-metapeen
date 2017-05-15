@@ -1,17 +1,18 @@
 import sys
+from getpass import getpass
 
 from peen.orm.models import User
 from peen import db
 
+# get admin username
 admin_name = ''
-admin_pass = ''
-
 if sys.version_info >= (3, 0):
     admin_name = input('Admin name: ')
-    admin_pass = input('Admin password: ')
 else:
     admin_name = raw_input('Admin name: ')
-    admin_pass = raw_input('Admin password: ')
+
+# get admin password
+admin_pass = getpass('Admin password: ')
 
 if admin_name is None or admin_pass is None:
     print('Please provide a username and password.')
