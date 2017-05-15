@@ -91,3 +91,13 @@ def delete_hacker():
         db.session.commit()
 
     return redirect(url_for('edit_hackers'))
+
+
+@app.route('/delete_site', methods=['POST'])
+@login_required
+def delete_site():
+    hacker = Hacker.query.filter_by(username=request.form.get('username')).first()
+    if hacker is not None:
+        hacker.remove_site(request.form.get('site'))
+
+    return redirect(url_for('edit_hackers'))

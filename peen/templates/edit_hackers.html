@@ -43,6 +43,19 @@
         <input name="token_csrf" type="hidden" value="{{ token_csrf }}">
     </form>
 
+    <h2>Delete site: </h2>
+    <form method="post" name="delete_site" action="{{ url_for('delete_site') }}">
+        <label for="username">Hacker: </label>
+        <select name="username" id="username">
+            {% for hacker in hackers %}
+                <option value="{{ hacker.username }}">{{ hacker.username }}</option>
+            {% endfor %}
+        </select><br>
+        <input name="site" type="text" placeholder="site">
+
+        <input type="submit" value="delete site">
+        <input name="token_csrf" type="hidden" value="{{ token_csrf }}">
+    </form>
     <h2>Delete Hacker: </h2>
     <form method="post" name="delete_hacker" action="{{ url_for('delete_hacker') }}">
         <label for="username">Hacker: </label>
@@ -54,5 +67,6 @@
         <input type="submit" value="delete user">
         <input name="token_csrf" type="hidden" value="{{ token_csrf }}">
     </form>
+
 </body>
 </html>

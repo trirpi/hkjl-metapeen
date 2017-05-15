@@ -28,8 +28,12 @@ class Hacker(db.Model):
         :return: score of site
         """
         place_of_score = 1
+        if site in site_weights.site_weights.keys():
+            weight = site_weights.site_weights[site]
+        else:
+            return 0
         if relative:
-            score = self.scores[site][place_of_score] * site_weights.site_weights[site]  # apply weights to score
+            score = self.scores[site][place_of_score] * weight  # apply weights to score
             return score
         else:
             return self.scores[site][place_of_score]
@@ -56,6 +60,10 @@ class Hacker(db.Model):
 
     def add_site(self, site, username):
         self.scores[site] = [username, 0]
+        db.session.commit()
+
+    def remove_site(self, site):
+        del(self.scores[site])
         db.session.commit()
 
     def __repr__(self):
