@@ -25,7 +25,7 @@ def update_score(hacker, site):
     :return: 
     """
     try:
-        crawler = crawler_callbacks[site](hacker.username)  # create crawler instance for specific user
+        crawler = crawler_callbacks[site](hacker)  # create crawler instance for specific user
         score = crawler.get_score()  # get score
 
         hacker.update_score(site, score)  # set new values
