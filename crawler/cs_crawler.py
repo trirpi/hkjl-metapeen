@@ -13,6 +13,9 @@ class CSCrawler(BaseCrawler):
         :rtype: int
         """
         response = self.get_page_content(self.site)
-
-        score = re.findall(r'\d+', response.find_all("div", class_="level_progress_details")[0].text)[1]
+        try:
+            score = re.findall(r'\d+', response.find_all("div", class_="level_progress_details")[0].text)[1]
+        except IndexError:
+            print('[*] Info: User ' + self.username + ' does not have an account on cs.')
+            score = 0
         return int(score)
