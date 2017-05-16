@@ -13,8 +13,16 @@ class OTWCrawler(BaseCrawler):
         :rtype: int
         """
         response = self.get_page_content(self.site)
+        try:
+            table = response.find_all("table")[1]
+            for words in table.contents:  # loop over tables to find the overthewire table where the correct score is stored
+                if 'OverTheWire.org' in str(words):
+                    score = int(re.findall(r'\d+', str(words.contents[2]))[0])
+                    return score
+            # the user hasn't got OTW on his wechall
+            print('[*] Info: User ' + self.username + ' has not added OTW to his sites on Wechall.')
+            return 0
+        except IndexError:
+            print('[*] Info: User ' + self.username + ' has not got a Wechall account.')
+            return 0
 
-        table = response.find_all("table")[1]
-        for words in table.contents:  # loop over tables to find the overthewire table where the correct score is stored
-            if 'OverTheWire.org' in str(words):
-                return int(re.findall(r'\d+', str(words.contents[2]))[0])
