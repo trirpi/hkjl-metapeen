@@ -55,7 +55,7 @@ class Hacker(db.Model):
         total_score = 0
         for score_site in self.scores:
             total_score += self.get_score(score_site, relative=True)
-        self.total_score = total_score
+        self.total_score = int(total_score)
         db.session.commit()
 
     def add_site(self, site, username):
