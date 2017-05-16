@@ -13,7 +13,10 @@ class HTSCrawler(BaseCrawler):
         :rtype: int
         """
         response = self.get_page_content(self.site)
-
-        score_element = response.find_all('td', class_='blight-td')[1]
-        score = re.findall(r'\d+', str(score_element.contents[0]))[0]
+        try:
+            score_element = response.find_all('td', class_='blight-td')[1]
+            score = re.findall(r'\d+', str(score_element.contents[0]))[0]
+        except IndexError:
+            print('[*] Info: the user ' + self.username + ' does not have a hackthissite account.')
+            score = 0
         return int(score)
