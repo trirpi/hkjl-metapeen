@@ -12,7 +12,10 @@ class HTCrawler(BaseCrawler):
         :rtype: int
         """
         response = self.get_page_content(self.site)
-
-        spans = response.find_all("span", class_="right")
-        score = spans[0].contents[0]
+        if not 'User not found' in str(response):
+            spans = response.find_all("span", class_="right")
+            score = spans[0].contents[0]
+        else:
+            print('[*] Info: User ' + self.username + ' does not have an account on hackthis.')
+            score = 0
         return int(score)
