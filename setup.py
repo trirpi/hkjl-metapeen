@@ -13,6 +13,7 @@ setup(
         'flask-sqlalchemy',
         'flask-login',
         'bs4',
-        'requests'
+        'requests',
+        'flask-restful'
     ]
 )
