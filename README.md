@@ -27,7 +27,7 @@ Start Flask.
 9. flask run
 
 Use gunicorn or gevent in production. (See: http://flask.pocoo.org/docs/0.10/deploying/)
-
+Also change the `SECRET_KEY` in config.py.
 
 #### Exemple credentials.py
 
