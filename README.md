@@ -1,6 +1,6 @@
 # HKJL METAPEEN
 
-### To start the development server
+## Development server
 
 Clone project.
 
@@ -24,10 +24,14 @@ Create database and admin.
 Start Flask.
 
 8. export FLASK_APP=peen
+
+8.b) export FLASK_DEBUG=1 (for debugging)
+
 9. flask run
 
 Use gunicorn or gevent in production. (See: http://flask.pocoo.org/docs/0.10/deploying/)
 Also change the `SECRET_KEY` in config.py.
+You can use `python -c "import uuid; print(uuid.uuid4())"` to create a random `SECRET_KEY`.
 
 #### Exemple credentials.py
 
