@@ -58,6 +58,13 @@ Currently shows exactly what is in the db.
 ##### Admin interface
 Currently lists all hackers
 
+#### API
+    /api/user/<id>
+returns user
+
+    /api/users
+returns list of all users
+
 ### The crawler
 This updates all the scores of the users. Should be ran by cron every hour or so.
 I am working on this.
