@@ -40,8 +40,11 @@ class Hacker(db.Model):
     def get_score(self, site):
         return self.accounts_info[site].score
 
+    def get_site_names(self):
+        return self.accounts_info.keys()
+
     def get_relative_score(self, site):
-        score = self.accounts_info[site].get_relative_score()
+        score = self.accounts_info[site].get_relative_score(site)
         return score
 
     def get_specific_username(self, site):
