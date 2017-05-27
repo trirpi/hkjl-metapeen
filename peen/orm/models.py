@@ -2,7 +2,21 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy.ext.mutable import MutableDict
 
 from peen import db
-import site_weights
+from site_weights import site_weights
+
+
+class AccountInfo(object):
+    """Stores information about site from a specific user."""
+    def __init__(self, username, score=0):
+        self.username = username
+        self.score = score
+
+    def update_score(self, new_score):
+        self.score = new_score
+
+    def get_relative_score(self, site):
+        weight = site_weights[site]
+        return self.score * weight
 
 
 class Hacker(db.Model):
@@ -11,59 +25,43 @@ class Hacker(db.Model):
     __tablename__ = 'hackers'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String)
-    scores = db.Column(MutableDict.as_mutable(db.PickleType))  # mutable so it auto detects changes
+    accounts_info = db.Column(MutableDict.as_mutable(db.PickleType))  # mutable so it auto detects changes
     total_score = db.Column(db.Integer)  # total score with weights
 
     def __init__(self, username):
         self.username = username
-        self.scores = {}  # create dictionary
+        self.accounts_info = {}  # create dictionary
         db.session.commit()
         self.update_total_score()
 
-    def get_score(self, site, relative=False):
-        """
-        Get score about specific site.
-        :param site: short name for site (e.g. 'ht')
-        :param relative: uses site_weights to determine how many points for the ranking it uses
-        :return: score of site
-        """
-        place_of_score = 1
-        if site in site_weights.site_weights.keys():
-            weight = site_weights.site_weights[site]
-        else:
-            return 0
-        if relative:
-            score = self.scores[site][place_of_score] * weight  # apply weights to score
-            return score
-        else:
-            return self.scores[site][place_of_score]
+    def get_score(self, site):
+        return self.accounts_info[site].score
+
+    def get_relative_score(self, site):
+        score = self.accounts_info[site].get_relative_score()
+        return score
 
     def get_username(self, site):
-        """Get username specific to a site"""
-        place_of_username = 0
-        if site in self.scores.keys():
-            return self.scores[site][place_of_username]
-        else:
-            return None
+        return self.accounts_info[site].username
 
-    def update_score(self, site, score):
+    def update_score(self, site, new_score):
         """Update score without weights from site."""
-        self.scores[site] = [self.scores[site][0], score]  # set new values
+        self.accounts_info[site].update_score(new_score)
 
     def update_total_score(self):
         """Update total score of all sites with weights."""
         total_score = 0
-        for score_site in self.scores:
-            total_score += self.get_score(score_site, relative=True)
+        for score_site in self.accounts_info:
+            total_score += self.get_relative_score(score_site)
         self.total_score = int(total_score)
         db.session.commit()
 
     def add_site(self, site, username):
-        self.scores[site] = [username, 0]
+        self.accounts_info[site] = AccountInfo(username)
         db.session.commit()
 
     def remove_site(self, site):
-        del(self.scores[site])
+        del(self.accounts_info[site])
         db.session.commit()
 
     def __repr__(self):
