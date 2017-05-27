@@ -59,7 +59,7 @@ def edit_admins():
 @login_required
 def edit_hackers():
     """page where you can edit hackers"""
-    return render_template('edit_hackers.html', hackers=Hacker.query.all(), token_csrf=generate_csrf_token())
+    return render_template('edit_hackers.html', hackers=Hacker.query.all(), sites=app.config["SUPPORTED_SITES"], token_csrf=generate_csrf_token())
 
 
 @app.route('/add_hacker', methods=['POST'])

@@ -12,8 +12,8 @@ def load_user(user_id):
 
 @app.route('/')
 def index():
-    users = Hacker.query.order_by(desc(Hacker.total_score)).all()
-    return render_template('index.html', users=users)
+    hackers = Hacker.query.order_by(desc(Hacker.total_score)).all()  # get hackers sorted on score
+    return render_template('index.html', users=hackers)
 
 if __name__ == '__main__':
     app.run()

@@ -7,7 +7,7 @@ from crawler.rm_crawler import RMCrawler
 from crawler.hts_crawler import HTSCrawler
 from crawler.nf_crawler import NFCrawler
 
-crawler_callbacks = {
+crawler_classes = {
     'cs': CSCrawler,
     'otw': OTWCrawler,
     'ht': HTCrawler,
@@ -25,7 +25,7 @@ def update_score(hacker, site):
     :return: 
     """
     try:
-        crawler = crawler_callbacks[site](hacker)  # create crawler instance for specific user
+        crawler = crawler_classes[site](hacker)  # create crawler instance for specific user
         score = crawler.get_score()  # get score
 
         hacker.update_score(site, score)  # set new values
