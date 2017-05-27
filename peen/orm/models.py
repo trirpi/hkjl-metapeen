@@ -22,18 +22,18 @@ class Hacker(db.Model):
         return self.get_site_account(site).score
 
     def get_relative_score(self, site):
-        score = self.accounts_info[site].get_relative_score(site)
+        score = self.get_site_account(site).get_relative_score()
         return score
 
     def update_score(self, site, new_score):
         """Update score without weights from site."""
-        self.accounts_info[site].update_score(new_score)
+        self.get_site_account(site).update_score(new_score)
 
     def update_total_score(self):
         """Update total score of all sites with weights."""
         total_score = 0
-        for score_site in self.accounts_info:
-            total_score += self.get_relative_score(score_site)
+        for account in self.accounts.all():
+            total_score += self.get_relative_score(account.site)
         self.total_score = int(total_score)
         db.session.commit()
 
