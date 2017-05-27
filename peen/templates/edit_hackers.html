@@ -19,7 +19,15 @@
                 <td>{{ hacker.id }}</td>
                 <td>{{ hacker.username }}</td>
                 <td>{{ hacker.total_score }}</td>
-                <td>{{ hacker.accounts_info }}</td>
+                <td>
+                    <table>
+                        {% for account in hacker.accounts.all() %}
+                            <tr>
+                            <td>{{ account }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </td>
             </tr>
         {% endfor %}
     </table>

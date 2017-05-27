@@ -65,7 +65,8 @@ def edit_hackers():
 @app.route('/add_hacker', methods=['POST'])
 @login_required
 def add_hacker():
-    new_hacker = Hacker(username=request.form.get('username'))
+    new_hacker = Hacker()
+    new_hacker.username = request.form.get('username')
     db.session.add(new_hacker)
     db.session.commit()
 
@@ -77,7 +78,7 @@ def add_hacker():
 def add_site():
     hacker = Hacker.query.filter_by(username=request.form.get('username')).first()
     specific_username = request.form.get('specific_username') or hacker.username  # if nothing is provide take normal username
-    hacker.add_site(request.form.get('site'), specific_username)
+    hacker.add_site_account(request.form.get('site'), specific_username)
 
     return redirect(url_for('edit_hackers'))
 
@@ -98,6 +99,6 @@ def delete_hacker():
 def delete_site():
     hacker = Hacker.query.filter_by(username=request.form.get('username')).first()
     if hacker is not None:
-        hacker.remove_site(request.form.get('site'))
+        hacker.remove_site_account(request.form.get('site'))
 
     return redirect(url_for('edit_hackers'))
