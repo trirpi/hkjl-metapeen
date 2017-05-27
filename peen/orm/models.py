@@ -18,6 +18,9 @@ class AccountInfo(object):
         weight = site_weights[site]
         return self.score * weight
 
+    def __repr__(self):
+        return "Account Info: username='{}', score='{}'".format(self.username, self.score)
+
 
 class Hacker(db.Model):
     """Metapeen user with all his scores."""
@@ -41,7 +44,7 @@ class Hacker(db.Model):
         score = self.accounts_info[site].get_relative_score()
         return score
 
-    def get_username(self, site):
+    def get_specific_username(self, site):
         return self.accounts_info[site].username
 
     def update_score(self, site, new_score):
@@ -65,7 +68,7 @@ class Hacker(db.Model):
         db.session.commit()
 
     def __repr__(self):
-        return "<Hacker(id='{}', username='{}')".format(self.id, self.username)
+        return "Hacker: id='{}', username='{}'".format(self.id, self.username)
 
 
 class User(db.Model):
@@ -98,4 +101,4 @@ class User(db.Model):
         return check_password_hash(self.password, password)
 
     def __repr__(self):
-        return "<User(id='{}', username='{}')".format(self.id, self.username)
+        return "User: id='{}', username='{}'".format(self.id, self.username)

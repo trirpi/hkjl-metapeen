@@ -1,0 +1,18 @@
+<h2>Delete site: </h2>
+<form method="post" name="delete_site" action="{{ url_for('delete_site') }}">
+    <label for="username">Hacker: </label>
+    <select name="username" id="username">
+        {% for hacker in hackers %}
+            <option value="{{ hacker.username }}">{{ hacker.username }}</option>
+        {% endfor %}
+    </select><br>
+    <label for="site">Site: </label>
+    <select name="site" id="site">
+        {% for site in sites %}
+            <option value="{{ site }}">{{ site }}</option>
+        {% endfor %}
+    </select><br>
+
+    <input type="submit" value="delete site">
+    <input name="token_csrf" type="hidden" value="{{ token_csrf }}">
+</form>

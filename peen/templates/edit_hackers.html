@@ -11,62 +11,23 @@
         <tr>
             <th>id</th>
             <th>username</th>
-            <th>extra</th>
+            <th>total score</th>
+            <th>accounts info</th>
         </tr>
         {% for hacker in hackers %}
             <tr>
                 <td>{{ hacker.id }}</td>
                 <td>{{ hacker.username }}</td>
-                <td>{{ hacker.scores }}</td>
+                <td>{{ hacker.total_score }}</td>
+                <td>{{ hacker.accounts_info }}</td>
             </tr>
         {% endfor %}
     </table>
 
-    <h2>Add Hacker: </h2>
-    <form method="post" name="add_hacker" action="{{ url_for('add_hacker') }}">
-        <input name="username" type="text" placeholder="username"><br>
-        <input type="submit" value="add hacker">
-        <input name="token_csrf" type="hidden" value="{{ token_csrf }}">
-    </form>
-
-    <h2>Add site: </h2>
-    <form method="post" name="add_site" action="{{ url_for('add_site') }}">
-        <label for="username">Hacker: </label>
-        <select name="username" id="username">
-            {% for hacker in hackers %}
-                <option value="{{ hacker.username }}">{{ hacker.username }}</option>
-            {% endfor %}
-        </select><br>
-        <input name="site" type="text" placeholder="site"><br>
-        <input name="specific_username" type="text" placeholder="specific username"><p>Defaults to the normal username.</p>
-        <input type="submit" value="add site">
-        <input name="token_csrf" type="hidden" value="{{ token_csrf }}">
-    </form>
-
-    <h2>Delete site: </h2>
-    <form method="post" name="delete_site" action="{{ url_for('delete_site') }}">
-        <label for="username">Hacker: </label>
-        <select name="username" id="username">
-            {% for hacker in hackers %}
-                <option value="{{ hacker.username }}">{{ hacker.username }}</option>
-            {% endfor %}
-        </select><br>
-        <input name="site" type="text" placeholder="site">
-
-        <input type="submit" value="delete site">
-        <input name="token_csrf" type="hidden" value="{{ token_csrf }}">
-    </form>
-    <h2>Delete Hacker: </h2>
-    <form method="post" name="delete_hacker" action="{{ url_for('delete_hacker') }}">
-        <label for="username">Hacker: </label>
-        <select name="username" id="username">
-            {% for hacker in hackers %}
-                <option value="{{ hacker.username }}">{{ hacker.username }}</option>
-            {% endfor %}
-        </select><br>
-        <input type="submit" value="delete user">
-        <input name="token_csrf" type="hidden" value="{{ token_csrf }}">
-    </form>
+    {% include "forms/add_hacker.html" %}
+    {% include "forms/delete_hacker.html" %}
+    {% include "forms/add_site.html" %}
+    {% include "forms/delete_site.html" %}
 
 </body>
 </html>

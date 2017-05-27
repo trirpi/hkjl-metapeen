@@ -14,3 +14,5 @@ SECRET_KEY = 'slafjsdalfhasklghsdlfjhasifjsdjkvnaioeuftotallynotrandombutoke'
 
 RESTFUL_JSON = {'separators': (', ', ': '),
                 'indent': 2}
+
+SUPPORTED_SITES = ['ht', 'hts', 'cs', 'otw', 'rm', 'nf']
