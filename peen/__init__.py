@@ -5,17 +5,18 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from config import configs
 
-app = Flask(__name__)
-app.config.from_object('config')
-
-db = SQLAlchemy(app)
-db.create_all()
+db = SQLAlchemy()
 
 lm = LoginManager()
-lm.init_app(app)
-lm.login_view = 'login'
+lm.login_view = 'admin.views.login'
 
-import peen.views
-import peen.admin.views
-import peen.api.views
+
+def create_app(config_name):
+    app = Flask(__name__)
+    app.config.from_object(configs[config_name])
+
+
+    import peen.views
+    import peen.admin.views
