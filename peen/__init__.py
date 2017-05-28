@@ -3,14 +3,15 @@
 """ Handles all the setup for app."""
 
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from flask_sqlalchemy import SQLAlchemy
+
 from config import configs
 
 db = SQLAlchemy()
 
 lm = LoginManager()
-lm.login_view = 'admin.views.login'
+lm.login_view = 'admin.login'
 
 
 def create_app(config_name):
@@ -18,5 +19,5 @@ def create_app(config_name):
     app.config.from_object(configs[config_name])
 
 
-    import peen.views
+    import peen.main.views
     import peen.admin.views
