@@ -48,8 +48,8 @@ def update_all_scores(hacker):
     >>> update_all_scores(hacker)
     """
 
-    for site_key in hacker.scores:
-        update_score(hacker, site_key)
+    for account in hacker.accounts.all():
+        update_score(hacker, account.site)
 
 
 def update_total_score(hacker):
