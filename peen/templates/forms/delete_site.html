@@ -1,5 +1,5 @@
 <h2>Delete site: </h2>
-<form method="post" name="delete_site" action="{{ url_for('delete_site') }}">
+<form method="post" name="delete_site" action="{{ url_for('admin.delete_site') }}">
     <label for="username">Hacker: </label>
     <select name="username" id="username">
         {% for hacker in hackers %}

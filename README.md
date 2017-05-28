@@ -13,25 +13,20 @@ Create virtual evironment.
 4. source metapeen/bin/activate
 
 Install dependencies.
-
-5. python setup.py develop
+5. pip install -r requirements.txt
 
 Create database and admin.
 
-6. python create_db.py
-7. python create_admin.py
+6. python manage.py deploy
 
 Start Flask.
 
-8. export FLASK_APP=peen
+8. python manage.py run
 
-8.b) export FLASK_DEBUG=1 (for debugging)
-
-9. flask run
 
 Use gunicorn or gevent in production. (See: http://flask.pocoo.org/docs/0.10/deploying/)
 Also change the `SECRET_KEY` in config.py.
-You can use `python -c "import uuid; print(uuid.uuid4())"` to create a random `SECRET_KEY`.
+You can use `python -c "import os; print(os.urandom(24))"` to create a random `SECRET_KEY`.
 
 #### Exemple credentials.py
 
