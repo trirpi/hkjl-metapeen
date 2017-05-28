@@ -1,13 +1,14 @@
 #!/usr/bin/env python
-import os
 import argparse
-import sys
 import getpass
+import os
+import sys
+from flask import _request_ctx_stack
 
 from crawler.crawler import update_all_scores, update_total_score
 from peen import create_app
-from peen.orm.models import User, Hacker
 from peen import db
+from peen.models import User, Hacker
 
 parser = argparse.ArgumentParser(description='Manage HKJL Metapeen application.')
 parser.add_argument('command', metavar='command', type=str, nargs='?', default='run',
@@ -15,15 +16,17 @@ parser.add_argument('command', metavar='command', type=str, nargs='?', default='
 arg = parser.parse_args()
 
 
-def test(coverage=False):
+def test():
     """Run the unit tests."""
-    from tests import test_basic
 
 
 def deploy():
     """Run deployment tasks."""
     # create db
-    db.create_all()
+    from peen import create_app
+    app = create_app('default')
+    with app.app_context():
+        db.create_all()
 
     # create admin user
     if sys.version_info >= (3, 0):
@@ -41,16 +44,20 @@ def deploy():
     admin = User(username=admin_name)
     admin.set_password(admin_pass)
 
-    db.session.add(admin)
-    db.session.commit()
+    with app.app_context():
+        db.session.add(admin)
+        db.session.commit()
 
 
 def crawl():
-    hackers = Hacker.query.all()
+    from peen import create_app
+    app = create_app('default')
+    with app.app_context():
+        hackers = Hacker.query.all()
 
-    for hacker in hackers:
-        update_all_scores(hacker)
-        update_total_score(hacker)
+        for hacker in hackers:
+            update_all_scores(hacker)
+            update_total_score(hacker)
 
 
 def run():

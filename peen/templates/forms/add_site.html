@@ -1,5 +1,5 @@
 <h2>Add site: </h2>
-<form method="post" name="add_site" action="{{ url_for('add_site') }}">
+<form method="post" name="add_site" action="{{ url_for('admin.add_site') }}">
     <label for="username">Hacker: </label>
     <select name="username" id="username">
         {% for hacker in hackers %}

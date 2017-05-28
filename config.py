@@ -22,8 +22,6 @@ class Config:
 
     ADMIN = os.environ.get('ADMIN')
 
-    SUPPORTED_SITES = ['ht', 'hts', 'cs', 'otw', 'rm', 'nf']  # this needs a better place but it is here for now
-
     @staticmethod
     def init_app(app):
         pass

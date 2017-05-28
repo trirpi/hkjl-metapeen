@@ -1,5 +1,5 @@
 <h2>Add Hacker: </h2>
-<form method="post" name="add_hacker" action="{{ url_for('add_hacker') }}">
+<form method="post" name="add_hacker" action="{{ url_for('admin.add_hacker') }}">
     <input name="username" type="text" placeholder="username"><br>
     <input type="submit" value="add hacker">
     <input name="token_csrf" type="hidden" value="{{ token_csrf }}">
