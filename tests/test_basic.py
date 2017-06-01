@@ -8,3 +8,5 @@ class BasicTestCase(unittest.TestCase):
     def tearDown(self):
         pass
 
+    def test_test(self):
+        print('hell')

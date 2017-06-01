@@ -3,12 +3,12 @@ import argparse
 import getpass
 import os
 import sys
-from flask import _request_ctx_stack
+import unittest
 
 from crawler.crawler import update_all_scores, update_total_score
-from peen import create_app
-from peen import db
+from peen import create_app, db
 from peen.models import User, Hacker
+from tests.test_basic import BasicTestCase
 
 parser = argparse.ArgumentParser(description='Manage HKJL Metapeen application.')
 parser.add_argument('command', metavar='command', type=str, nargs='?', default='run',
@@ -18,6 +18,8 @@ arg = parser.parse_args()
 
 def test():
     """Run the unit tests."""
+    suite = unittest.TestLoader().loadTestsFromTestCase(BasicTestCase)
+    unittest.TextTestRunner(verbosity=2).run(suite)
 
 
 def deploy():
