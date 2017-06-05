@@ -14,7 +14,7 @@ def login():
             if user.check_password(request.form.get('password')):
                 login_user(user)
                 flash('Logged in successfully.')
-                return redirect(url_for('admin_interface.admin'))
+                return redirect(url_for('admin.main'))
         flash('Incorrect credentials.')
     return render_template('login.html')
 
