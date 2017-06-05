@@ -43,7 +43,9 @@ class Hacker(db.Model):
         db.session.commit()
 
     def remove_site_account(self, site):
-        db.session.delete(self.get_site_account(site))
+        account = self.get_site_account(site)
+        if account is not None:
+            db.session.delete(account)
         db.session.commit()
 
     def __repr__(self):

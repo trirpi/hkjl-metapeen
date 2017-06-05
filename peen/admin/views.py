@@ -29,23 +29,18 @@ def check_user():
         abort(401)
 
 
-@admin.route('/')
-def main():
-    """main admin page"""
-    return render_template('admin.html')
-
-
-@admin.route('/edit_admins', methods=['GET', 'POST'])
-def edit_admins():
-    """page where you can edit admins"""
-    return render_template('edit_admins.html', admins=User.query.all(), token_csrf=generate_csrf_token())
-
-
-@admin.route('/edit_hackers', methods=['GET', 'POST'])
-def edit_hackers():
+@admin.route('/', methods=['GET', 'POST'])
+def hackers():
     """page where you can edit hackers"""
-    return render_template('edit_hackers.html',
+    return render_template('hackers.html',
                            hackers=Hacker.query.all(),
+                           token_csrf=generate_csrf_token())
+
+
+@admin.route('/edit_hacker/<int:hacker_id>', methods=['GET', 'POST'])
+def edit_hacker(hacker_id):
+    return render_template('edit_hacker.html',
+                           hacker=Hacker.query.get(hacker_id),
                            sites=['ht', 'hts', 'cs', 'otw', 'rm', 'nf'],
                            token_csrf=generate_csrf_token())
 
@@ -57,32 +52,32 @@ def add_hacker():
     db.session.add(new_hacker)
     db.session.commit()
 
-    return redirect(url_for('.edit_hackers'))
+    return redirect(url_for('.hackers'))
 
 
-@admin.route('/add_site', methods=['POST'])
-def add_site():
-    hacker = Hacker.query.filter_by(username=request.form.get('username')).first()
+@admin.route('/add_site/<int:hacker_id>', methods=['POST'])
+def add_site(hacker_id):
+    hacker = Hacker.query.get(hacker_id)
     specific_username = request.form.get('specific_username') or hacker.username  # if nothing is provide take normal username
     hacker.add_site_account(request.form.get('site'), specific_username)
 
-    return redirect(url_for('.edit_hackers'))
+    return redirect(url_for('.edit_hacker', hacker_id=hacker_id))
 
 
-@admin.route('/delete_hacker', methods=['POST'])
-def delete_hacker():
-    hacker = Hacker.query.filter_by(username=request.form.get('username')).first()
+@admin.route('/delete/<int:hacker_id>/', methods=['POST'])
+def delete_hacker(hacker_id):
+    hacker = Hacker.query.get(hacker_id)
     if hacker is not None:  # if it exists
         db.session.delete(hacker)
         db.session.commit()
 
-    return redirect(url_for('.edit_hackers'))
+    return redirect(url_for('.hackers'))
 
 
-@admin.route('/delete_site', methods=['POST'])
-def delete_site():
-    hacker = Hacker.query.filter_by(username=request.form.get('username')).first()
+@admin.route('/delete_site/<int:hacker_id>', methods=['POST'])
+def delete_site(hacker_id):
+    hacker = Hacker.query.get(hacker_id)
     if hacker is not None:
         hacker.remove_site_account(request.form.get('site'))
 
-    return redirect(url_for('.edit_hackers'))
+    return redirect(url_for('.edit_hacker', hacker_id=hacker_id))

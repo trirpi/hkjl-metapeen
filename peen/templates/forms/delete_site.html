@@ -1,11 +1,5 @@
 <h2>Delete site: </h2>
-<form method="post" name="delete_site" action="{{ url_for('admin.delete_site') }}">
-    <label for="username">Hacker: </label>
-    <select name="username" id="username">
-        {% for hacker in hackers %}
-            <option value="{{ hacker.username }}">{{ hacker.username }}</option>
-        {% endfor %}
-    </select><br>
+<form method="post" name="delete_site" action="{{ url_for('admin.delete_site', hacker_id=hacker.id) }}">
     <label for="site">Site: </label>
     <select name="site" id="site">
         {% for site in sites %}

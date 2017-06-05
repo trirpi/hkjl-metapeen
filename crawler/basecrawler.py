@@ -30,5 +30,8 @@ class BaseCrawler(object):
                 crawl_session.post(login_urls[site], credentials.callbacks[site])
 
             # get the profile page where the scores are on
-            request = crawl_session.get(self.profile_url).content
-            return BeautifulSoup(request, "html.parser")  # convert to BeautifulSoup response
+            request = crawl_session.get(self.profile_url)
+            request.raise_for_status()
+
+            request_content = request.content
+            return BeautifulSoup(request_content, "html.parser")  # convert to BeautifulSoup response
