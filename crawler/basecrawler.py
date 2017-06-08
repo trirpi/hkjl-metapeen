@@ -35,3 +35,12 @@ class BaseCrawler(object):
 
             request_content = request.content
             return BeautifulSoup(request_content, "html.parser")  # convert to BeautifulSoup response
+
+
+class AccountDoesNotExist(Exception):
+    def __init__(self, site, username):
+        self.site = site
+        self.username = username
+
+    def __repr__(self):
+        return '<Error: account {} from user {} does not exist>'.format(self.site, self.username)

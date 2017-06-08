@@ -63,6 +63,17 @@ class ProductionConfig(Config):
             subject=cls.MAIL_SUBJECT_PREFIX + ' Application Error',
             credentials=credentials,
             secure=secure)
+        mail_handler.setFormatter(logging.Formatter('''
+        Message type:       %(levelname)s
+        Location:           %(pathname)s:%(lineno)d
+        Module:             %(module)s
+        Function:           %(funcName)s
+        Time:               %(asctime)s
+
+        Message:
+
+        %(message)s
+        '''))
         mail_handler.setLevel(logging.ERROR)
         app.logger.addHandler(mail_handler)
 

@@ -26,7 +26,7 @@ def deploy():
     """Run deployment tasks."""
     # create db
     from peen import create_app
-    app = create_app('default')
+    app = create_app(os.getenv('FLASK_CONFIG') or 'default')
     with app.app_context():
         db.create_all()
 
