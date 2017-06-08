@@ -22,6 +22,8 @@ def test():
     unittest.TextTestRunner(verbosity=2).run(suite)
 
 
+
+
 def deploy():
     """Run deployment tasks."""
     # create db
@@ -53,7 +55,7 @@ def deploy():
 
 def crawl():
     from peen import create_app
-    app = create_app('default')
+    app = create_app(os.getenv('FLASK_CONFIG') or 'default')
     with app.app_context():
         hackers = Hacker.query.all()
 
@@ -61,13 +63,7 @@ def crawl():
             update_all_scores(hacker)
             update_total_score(hacker)
 
-
-def run():
-    app = create_app(os.getenv('FLASK_CONFIG') or 'default')
-    app.run()
-
 commands = {
-    'run': run,
     'crawl': crawl,
     'deploy': deploy,
     'test': test

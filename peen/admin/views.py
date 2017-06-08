@@ -30,7 +30,7 @@ def check_user():
 
 
 @admin.route('/', methods=['GET', 'POST'])
-def hackers():
+def main():
     """page where you can edit hackers"""
     return render_template('hackers.html',
                            hackers=Hacker.query.all(),
@@ -52,7 +52,7 @@ def add_hacker():
     db.session.add(new_hacker)
     db.session.commit()
 
-    return redirect(url_for('.hackers'))
+    return redirect(url_for('.main'))
 
 
 @admin.route('/add_site/<int:hacker_id>', methods=['POST'])
@@ -71,7 +71,7 @@ def delete_hacker(hacker_id):
         db.session.delete(hacker)
         db.session.commit()
 
-    return redirect(url_for('.hackers'))
+    return redirect(url_for('.main'))
 
 
 @admin.route('/delete_site/<int:hacker_id>', methods=['POST'])

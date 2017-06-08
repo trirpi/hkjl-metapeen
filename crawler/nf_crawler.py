@@ -17,5 +17,5 @@ class NFCrawler(BaseCrawler):
         try:
             score = re.findall(r'\d+', response.find_all("span")[0].text)[0]
         except IndexError:
-            raise AccountDoesNotExist
+            raise AccountDoesNotExist(self.site, self.username)
         return int(score)
