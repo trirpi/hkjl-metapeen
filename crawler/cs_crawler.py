@@ -1,4 +1,4 @@
-from crawler.basecrawler import BaseCrawler
+from crawler.basecrawler import BaseCrawler, AccountDoesNotExist
 import re
 
 
@@ -16,6 +16,5 @@ class CSCrawler(BaseCrawler):
         try:
             score = re.findall(r'\d+', response.find_all("div", class_="level_progress_details")[0].text)[1]
         except IndexError:
-            print('[*] Info: User ' + self.username + ' does not have an account on cs.')
-            score = 0
+            raise AccountDoesNotExist
         return int(score)

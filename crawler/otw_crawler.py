@@ -1,4 +1,4 @@
-from crawler.basecrawler import BaseCrawler
+from crawler.basecrawler import BaseCrawler, AccountDoesNotExist
 import re
 
 
@@ -20,9 +20,6 @@ class OTWCrawler(BaseCrawler):
                     score = int(re.findall(r'\d+', str(words.contents[2]))[0])
                     return score
             # the user hasn't got OTW on his wechall
-            print('[*] Info: User ' + self.username + ' has not added OTW to his sites on Wechall.')
-            return 0
+            raise AccountDoesNotExist
         except IndexError:
-            print('[*] Info: User ' + self.username + ' has not got a Wechall account.')
-            return 0
-
+            raise AccountDoesNotExist
