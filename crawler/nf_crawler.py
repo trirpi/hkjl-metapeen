@@ -1,4 +1,4 @@
-from crawler.basecrawler import BaseCrawler
+from crawler.basecrawler import BaseCrawler, AccountDoesNotExist
 import re
 
 
@@ -17,6 +17,5 @@ class NFCrawler(BaseCrawler):
         try:
             score = re.findall(r'\d+', response.find_all("span")[0].text)[0]
         except IndexError:
-            print('[*] Info: User ' + self.username + ' does not have an account on nf.')
-            score = 0
+            raise AccountDoesNotExist(self.site, self.username)
         return int(score)

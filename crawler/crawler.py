@@ -43,7 +43,7 @@ def update_all_scores(hacker):
 
     :Example:
 
-    >>> from peen.orm.models import Hacker
+    >>> from peen.models import Hacker
     >>> hacker = Hacker.query.filter_by(username='henk').first()
     >>> update_all_scores(hacker)
     """

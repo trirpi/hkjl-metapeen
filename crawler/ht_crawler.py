@@ -1,4 +1,4 @@
-from crawler.basecrawler import BaseCrawler
+from crawler.basecrawler import BaseCrawler, AccountDoesNotExist
 
 
 class HTCrawler(BaseCrawler):
@@ -16,6 +16,5 @@ class HTCrawler(BaseCrawler):
             spans = response.find_all("span", class_="right")
             score = spans[0].contents[0]
         else:  # It would take the score of the user logged in when the user was not found.
-            print('[*] Info: User ' + self.username + ' does not have an account on hackthis.')
-            score = 0
+            raise AccountDoesNotExist
         return int(score)
