@@ -47,12 +47,6 @@ class ProductionConfig(Config):
     def init_app(cls, app):
         Config.init_app(app)
 
-
-class UnixConfig(ProductionConfig):
-    @classmethod
-    def init_app(cls, app):
-        ProductionConfig.init_app(app)
-
         # log to syslog
         import logging
         from logging.handlers import SysLogHandler
@@ -65,7 +59,6 @@ configs = {
     'development': DevelopmentConfig,
     'testing': TestingConfig,
     'production': ProductionConfig,
-    'unix': UnixConfig,
 
     'default': DevelopmentConfig
 }
