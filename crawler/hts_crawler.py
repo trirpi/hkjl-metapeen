@@ -1,4 +1,4 @@
-from crawler.basecrawler import BaseCrawler
+from crawler.basecrawler import BaseCrawler, AccountDoesNotExist
 import re
 
 
@@ -17,6 +17,5 @@ class HTSCrawler(BaseCrawler):
             score_element = response.find_all('td', class_='blight-td')[1]
             score = re.findall(r'\d+', str(score_element.contents[0]))[0]
         except IndexError:
-            print('[*] Info: the user ' + self.username + ' does not have a hackthissite account.')
-            score = 0
+            raise AccountDoesNotExist
         return int(score)

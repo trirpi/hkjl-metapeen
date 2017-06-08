@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit hackers - MeTaPeEn</title>
+</head>
+<body>
+    <h1>{{ hacker.username }}</h1><h3><a href="{{ url_for('admin.main') }}">Go back</a></h3>
+    <ul>
+        <li>id: {{ hacker.id }}</li>
+        <li>total score: {{ hacker.total_score }}</li>
+        <li>
+            <table>
+                {% for account in hacker.accounts.all() %}
+                    <tr>
+                    <td>{{ account }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </li>
+    </ul>
+
+    {% include "forms/delete_hacker.html" %}
+    {% include "forms/add_site.html" %}
+    {% include "forms/delete_site.html" %}
+
+</body>
+</html>

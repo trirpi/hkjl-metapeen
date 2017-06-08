@@ -2,4 +2,7 @@ credentials.py
 .idea
 *.pyc
 app.db
-comments.txt
+
+data-test.sqlite
+data-dev.sqlite
+data.sqlite
