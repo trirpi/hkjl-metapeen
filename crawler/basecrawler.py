@@ -1,8 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 
-from config import profile_urls, login_urls
-import credentials
+from crawler.config import profile_urls
 
 
 class BaseCrawler(object):
@@ -26,9 +25,6 @@ class BaseCrawler(object):
         :return: BeautifulSoup object of the site where the score is on
         """
         with requests.Session() as crawl_session:
-            if site in login_urls:  # you need to login to access points
-                crawl_session.post(login_urls[site], credentials.callbacks[site])
-
             # get the profile page where the scores are on
             request = crawl_session.get(self.profile_url)
             request.raise_for_status()

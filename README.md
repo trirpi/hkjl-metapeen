@@ -9,24 +9,24 @@ Clone project.
 
 Create virtual evironment.
 
-3. virtualenv metapeen
+3. virtualenv -p python3 metapeen
 4. source metapeen/bin/activate
 
 Install dependencies.
+
 5. pip install -r requirements.txt
 
 Create database and admin.
 
-6. python manage.py deploy
+6. python manage.py setup
 
 Start Flask.
 
-8. python manage.py run
+8. python run.py
 
 
 Use gunicorn or gevent in production. (See: http://flask.pocoo.org/docs/0.10/deploying/)
-Also change the `SECRET_KEY` in config.py.
-You can use `python -c "import os; print(os.urandom(24))"` to create a random `SECRET_KEY`.
+
 
 #### Exemple credentials.py
 

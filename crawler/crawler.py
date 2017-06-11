@@ -1,11 +1,11 @@
 from peen import db
 
-from cs_crawler import CSCrawler
-from ht_crawler import HTCrawler
-from otw_crawler import OTWCrawler
-from rm_crawler import RMCrawler
-from hts_crawler import HTSCrawler
-from nf_crawler import NFCrawler
+from crawler.cs_crawler import CSCrawler
+from crawler.ht_crawler import HTCrawler
+from crawler.otw_crawler import OTWCrawler
+from crawler.rm_crawler import RMCrawler
+from crawler.hts_crawler import HTSCrawler
+from crawler.nf_crawler import NFCrawler
 
 crawler_classes = {
     'cs': CSCrawler,
