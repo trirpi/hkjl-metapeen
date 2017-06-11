@@ -6,7 +6,7 @@ import sys
 import unittest
 
 from crawler.crawler import update_all_scores, update_total_score
-from peen import create_app, db
+from peen import db
 from peen.models import User, Hacker
 from tests.test_basic import BasicTestCase
 
@@ -20,8 +20,6 @@ def test():
     """Run the unit tests."""
     suite = unittest.TestLoader().loadTestsFromTestCase(BasicTestCase)
     unittest.TextTestRunner(verbosity=2).run(suite)
-
-
 
 
 def deploy():
