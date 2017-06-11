@@ -17,5 +17,5 @@ class HTSCrawler(BaseCrawler):
             score_element = response.find_all('td', class_='blight-td')[1]
             score = re.findall(r'\d+', str(score_element.contents[0]))[0]
         except IndexError:
-            raise AccountDoesNotExist
+            raise AccountDoesNotExist(self.site, self.username)
         return int(score)

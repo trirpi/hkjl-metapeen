@@ -16,5 +16,5 @@ class HTCrawler(BaseCrawler):
             spans = response.find_all("span", class_="right")
             score = spans[0].contents[0]
         else:  # It would take the score of the user logged in when the user was not found.
-            raise AccountDoesNotExist
+            raise AccountDoesNotExist(self.site, self.username)
         return int(score)
