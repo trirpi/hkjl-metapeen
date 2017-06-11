@@ -16,5 +16,5 @@ class CSCrawler(BaseCrawler):
         try:
             score = re.findall(r'\d+', response.find_all("div", class_="level_progress_details")[0].text)[1]
         except IndexError:
-            raise AccountDoesNotExist
+            raise AccountDoesNotExist(self.site, self.username)
         return int(score)

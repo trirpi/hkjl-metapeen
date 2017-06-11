@@ -20,6 +20,6 @@ class OTWCrawler(BaseCrawler):
                     score = int(re.findall(r'\d+', str(words.contents[2]))[0])
                     return score
             # the user hasn't got OTW on his wechall
-            raise AccountDoesNotExist
+            raise AccountDoesNotExist(self.site, self.username)
         except IndexError:
-            raise AccountDoesNotExist
+            raise AccountDoesNotExist(self.site, self.username)
