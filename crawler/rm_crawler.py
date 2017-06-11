@@ -1,4 +1,4 @@
-from crawler.basecrawler import BaseCrawler, AccountDoesNotExist
+from basecrawler import BaseCrawler, AccountDoesNotExist
 
 
 class RMCrawler(BaseCrawler):

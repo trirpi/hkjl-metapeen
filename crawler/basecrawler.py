@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 
-from crawler.config import profile_urls, login_urls
+from config import profile_urls, login_urls
 import credentials
 
 
