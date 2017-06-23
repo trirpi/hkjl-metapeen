@@ -1,6 +1,6 @@
 # HKJL METAPEEN
 
-## Development server
+## Start server
 
 Clone project.
 
@@ -9,24 +9,25 @@ Clone project.
 
 Create virtual evironment.
 
-3. virtualenv metapeen
+3. virtualenv -p python3 metapeen
 4. source metapeen/bin/activate
 
 Install dependencies.
+
 5. pip install -r requirements.txt
+
+Set mode to development or production. (if you don't do this, it will default to development)
+
+6. export FLASK_CONFIG=development
 
 Create database and admin.
 
-6. python manage.py deploy
+7. python manage.py setup
 
 Start Flask.
 
-8. python manage.py run
+8. python run.py
 
-
-Use gunicorn or gevent in production. (See: http://flask.pocoo.org/docs/0.10/deploying/)
-Also change the `SECRET_KEY` in config.py.
-You can use `python -c "import os; print(os.urandom(24))"` to create a random `SECRET_KEY`.
 
 #### Exemple credentials.py
 
@@ -46,11 +47,11 @@ There are two main parts:
 ### The website
 The website has an index page where all the scores are listed. And there is an admin interface.
 The scores are fetched from a sqlite db (this can become redis or something other later).
-The db has 2 tables:
+The db has 3 tables:
 
 - Hacker: users with there scores and usernames of ctf sites
 - User: an admin user (or maybe more then one)
-
+- Account: account of hackers (specific site, current score, specific username)
 ##### Index page
 Currently shows exactly what is in the db.
 
@@ -70,5 +71,3 @@ I am working on this.
 
 
 More info: https://pad.hackenkunjeleren.nl/p/hkjl-metapeen-clone
-
-
