@@ -4,6 +4,18 @@ from peen import db
 from site_weights import site_weights
 
 
+class Site(db.Model):
+    """Sites that can be used"""
+
+    __tablename__ = 'sites'
+    id = db.Column(db.Integer, primary_key=True)
+    short_name = db.Column(db.String)
+    full_name = db.Column(db.String)
+
+    add_site_explanation = db.Column(db.String)
+    weight = db.Column(db.Integer)
+
+
 class Hacker(db.Model):
     """Metapeen user with all his scores."""
 
@@ -57,9 +69,11 @@ class Account(db.Model):
 
     __tablename__ = 'accounts'
     id = db.Column(db.Integer, primary_key=True)
-    site = db.Column(db.String)
     specific_username = db.Column(db.String)
     score = db.Column(db.Integer)
+
+    site = db.relationship('Site', backref=db.backref('accounts', lazy='dynamic'))
+    site_id = db.Column(db.Integer, db.ForeignKey('sites.id'))
 
     user = db.relationship('Hacker', backref=db.backref('accounts', lazy='dynamic'))
     user_id = db.Column(db.Integer, db.ForeignKey('hackers.id'))

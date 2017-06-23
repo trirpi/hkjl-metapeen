@@ -41,7 +41,6 @@ def main():
 def edit_hacker(hacker_id):
     return render_template('edit_hacker.html',
                            hacker=Hacker.query.get(hacker_id),
-                           sites=['ht', 'hts', 'cs', 'otw', 'rm', 'nf'],
                            token_csrf=generate_csrf_token())
 
 

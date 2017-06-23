@@ -7,7 +7,7 @@ import unittest
 
 from crawler.crawler import update_all_scores, update_total_score
 from peen import db
-from peen.models import User, Hacker
+from peen.models import User, Hacker, Site
 from tests.test_basic import BasicTestCase
 
 parser = argparse.ArgumentParser(description='Manage HKJL Metapeen application.')
@@ -43,9 +43,58 @@ def setup():
     admin = User(username=admin_name)
     admin.set_password(admin_pass)
 
+    sites_info = [
+        {
+            'short_name': 'ht',
+            'full_name': 'Hack This',
+            'explanation': 'Hack This',
+            'weight': 1
+        },
+        {
+            'short_name': 'hts',
+            'full_name': 'Hack This Site',
+            'explanation': 'Hack This Site',
+            'weight': 1
+        },
+        {
+            'short_name': 'cs',
+            'full_name': 'Certified Secure',
+            'explanation': 'Certified Secure (username or id)',
+            'weight': 1
+        },        {
+            'short_name': 'rm',
+            'full_name': 'Root Me',
+            'explanation': 'Root Me',
+            'weight': 1
+        },
+        {
+            'short_name': 'nf',
+            'full_name': 'Netforce',
+            'explanation': 'Netforce (userid)',
+            'weight': 1
+        },
+        {
+            'short_name': 'otw',
+            'full_name': 'Over The Wire',
+            'explanation': 'Over The Wire (Wechall username)',
+            'weight': 1
+        }
+    ]
+    # create Site objects
+    sites = [
+        Site(short_name=site['short_name'],
+             full_name=site['full_name'],
+             add_site_explanation=site['explanation'],
+             weight=site['weight'])
+        for site in sites_info
+    ]
+    # save everything in db
     with app.app_context():
         db.session.add(admin)
         db.session.commit()
+        for site in sites:
+            db.session.add(site)
+            db.session.commit()
 
 
 def crawl():
