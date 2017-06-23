@@ -1,11 +1,10 @@
 #!/usr/bin/env python
+
 import argparse
 import os
 from peen import create_app
 
 parser = argparse.ArgumentParser(description='Run HKJL Metapeen application.')
-parser.add_argument('--mode', dest='mode', default='default',
-                    help='mode to run (production, test, development)')
 parser.add_argument('--port', dest='port', default=5000,
                     help='port to run on')
 parser.add_argument('--host', dest='host', default='127.0.0.1',
@@ -13,6 +12,8 @@ parser.add_argument('--host', dest='host', default='127.0.0.1',
 parser.add_argument('--secret_key', dest='secret_key', default=os.urandom(24),
                     help='secret key (defaults to an automatically generated one with "import os; os.urandom(24))"')
 args = parser.parse_args()
+
+app_mode = os.getenv('FLASK_CONFIG') or 'default'
 
 
 def run(mode):
@@ -32,4 +33,4 @@ def run(mode):
         app.run(host=args.host, port=args.port)
 
 if __name__ == '__main__':
-    run(args.mode)
+    run(app_mode)
