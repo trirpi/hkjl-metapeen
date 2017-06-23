@@ -12,7 +12,7 @@ from tests.test_basic import BasicTestCase
 
 parser = argparse.ArgumentParser(description='Manage HKJL Metapeen application.')
 parser.add_argument('command', metavar='command', type=str, nargs='?', default='run',
-                    help='action to perform (deploy, run, test, crawl)')
+                    help='action to perform (setup, test, crawl)')
 arg = parser.parse_args()
 
 
@@ -22,7 +22,7 @@ def test():
     unittest.TextTestRunner(verbosity=2).run(suite)
 
 
-def deploy():
+def setup():
     """Run deployment tasks."""
     # create db
     from peen import create_app
@@ -31,10 +31,7 @@ def deploy():
         db.create_all()
 
     # create admin user
-    if sys.version_info >= (3, 0):
-        admin_name = input('Admin name: ')
-    else:
-        admin_name = raw_input('Admin name: ')
+    admin_name = input('Admin name: ')
 
     # get admin password
     admin_pass = getpass.getpass('Admin password: ')
@@ -63,7 +60,7 @@ def crawl():
 
 commands = {
     'crawl': crawl,
-    'deploy': deploy,
+    'setup': setup,
     'test': test
 }
 

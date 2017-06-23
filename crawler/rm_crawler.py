@@ -1,4 +1,4 @@
-from basecrawler import BaseCrawler, AccountDoesNotExist
+from crawler.basecrawler import BaseCrawler, AccountDoesNotExist
 
 
 class RMCrawler(BaseCrawler):
@@ -15,5 +15,5 @@ class RMCrawler(BaseCrawler):
         try:
             score = response.find_all("div", class_="t-body")[0].contents[5].contents[5].contents[1].text
         except IndexError:
-            raise AccountDoesNotExist
+            raise AccountDoesNotExist(self.site, self.username)
         return int(score)
