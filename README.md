@@ -1,6 +1,6 @@
 # HKJL METAPEEN
 
-## Development server
+## Start server
 
 Clone project.
 
@@ -16,13 +16,17 @@ Install dependencies.
 
 5. pip install -r requirements.txt
 
+Set mode to development or production. (if you don't do this, it will default to development)
+
+6. export FLASK_CONFIG=development
+
 Create database and admin.
 
-6. python manage.py setup
+7. python manage.py setup
 
 Start Flask.
 
-8. python run.py --mode development --host localhost --port 5000
+8. python run.py
 
 
 #### Exemple credentials.py
