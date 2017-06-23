@@ -5,3 +5,13 @@ bs4
 requests
 gevent
 lxml
+werkzeug
+jinja2
+itsdangerous
+click
+sqlalchemy
+urllib3
+chardet
+certifi
+idna
+credentials
