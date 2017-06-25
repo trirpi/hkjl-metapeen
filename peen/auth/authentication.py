@@ -12,7 +12,7 @@ def login():
         user = User.query.filter_by(username=request.form.get('username')).first()
         if user:
             if user.check_password(request.form.get('password')):
-                login_user(user)
+                login_user(user, remember=True)
                 flash('Logged in successfully.')
                 return redirect(url_for('admin.main'))
         flash('Incorrect credentials.')

@@ -18,7 +18,11 @@
                 <td>{{ loop.index }}</td>
                 <td>{{ user.total_score }}</td>
                 <td>{{ user.username }}</td>
-                <td>{{ user.scores }}</td>
+                <td>
+                    {% for account in user.accounts %}
+                        {{ account.short_site_name }}: {{ account.score }}
+                    {% endfor %}
+                </td>
             </tr>
         {% endfor %}
     </table>

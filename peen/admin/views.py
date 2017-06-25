@@ -1,11 +1,13 @@
 from binascii import b2a_hex
 from os import urandom
+import threading
 
 from flask import request, render_template, redirect, url_for, session, abort
 from flask_login import current_user
 
 from peen import db
-from peen.models import User, Hacker
+from peen.models import Hacker, Site
+from manage import crawl
 from . import admin
 
 
@@ -34,7 +36,8 @@ def main():
     """page where you can edit hackers"""
     return render_template('hackers.html',
                            hackers=Hacker.query.all(),
-                           token_csrf=generate_csrf_token())
+                           token_csrf=generate_csrf_token(),
+                           sites=Site.query.all())
 
 
 @admin.route('/edit_hacker/<int:hacker_id>', methods=['GET', 'POST'])
@@ -54,15 +57,6 @@ def add_hacker():
     return redirect(url_for('.main'))
 
 
-@admin.route('/add_site/<int:hacker_id>', methods=['POST'])
-def add_site(hacker_id):
-    hacker = Hacker.query.get(hacker_id)
-    specific_username = request.form.get('specific_username') or hacker.username  # if nothing is provide take normal username
-    hacker.add_site_account(request.form.get('site'), specific_username)
-
-    return redirect(url_for('.edit_hacker', hacker_id=hacker_id))
-
-
 @admin.route('/delete/<int:hacker_id>/', methods=['POST'])
 def delete_hacker(hacker_id):
     hacker = Hacker.query.get(hacker_id)
@@ -73,6 +67,16 @@ def delete_hacker(hacker_id):
     return redirect(url_for('.main'))
 
 
+@admin.route('/add_site/<int:hacker_id>', methods=['POST'])
+def add_site(hacker_id):
+    hacker = Hacker.query.get(hacker_id)
+    specific_username = request.form.get('specific_username') or hacker.username  # if nothing is provide take normal username
+    site = Site.query.filter_by(short_name=request.form.get('site')).first()
+    hacker.add_site_account(specific_username, site)
+
+    return redirect(url_for('.edit_hacker', hacker_id=hacker_id))
+
+
 @admin.route('/delete_site/<int:hacker_id>', methods=['POST'])
 def delete_site(hacker_id):
     hacker = Hacker.query.get(hacker_id)
@@ -80,3 +84,21 @@ def delete_site(hacker_id):
         hacker.remove_site_account(request.form.get('site'))
 
     return redirect(url_for('.edit_hacker', hacker_id=hacker_id))
+
+
+@admin.route('/change_weight', methods=['POST'])
+def change_weight():
+    site = Site.query.get(request.form.get('site'))
+    site.weight = request.form.get('weight')
+    db.session.commit()
+
+    return redirect(url_for('.main'))
+
+
+@admin.route('/crawl_all', methods=['POST'])
+def crawl_all():
+    crawl_tread = threading.Thread(target=crawl)
+    crawl_tread.start()
+
+    return redirect(url_for('.main'))
+
