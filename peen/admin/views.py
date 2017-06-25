@@ -101,4 +101,3 @@ def crawl_all():
     crawl_tread.start()
 
     return redirect(url_for('.main'))
-
