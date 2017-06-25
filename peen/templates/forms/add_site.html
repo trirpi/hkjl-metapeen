@@ -2,12 +2,9 @@
 <form method="post" name="add_site" action="{{ url_for('admin.add_site', hacker_id=hacker.id) }}">
     <label for="site">Site: </label>
     <select name="site" id="site">
-        <option value="ht">Hack This</option>
-        <option value="hts">Hack This Site</option>
-        <option value="cs">Certified Secure</option>
-        <option value="otw">Over The Wire (Wechall username)</option>
-        <option value="rm">Root Me</option>
-        <option value="nf">Netforce (Id of user)</option>
+        {% for site in hacker.get_optional_sites() %}
+            <option value="{{ site.short_name }}">{{ site.add_site_explanation }}</option>
+        {% endfor %}
     </select><br>
     <input name="specific_username" type="text" placeholder="specific username"><br> If empty, default to normal username.
     <input type="submit" value="add site">
