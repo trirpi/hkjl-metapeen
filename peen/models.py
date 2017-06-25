@@ -59,6 +59,13 @@ class Hacker(db.Model):
         self.accounts.append(account)
         db.session.commit()
 
+    def get_optional_sites(self):
+        sites = Site.query.all()
+        registered_sites = []
+        for account in self.accounts:
+            registered_sites.append(account.site)
+        return [x for x in sites if x not in registered_sites]
+
     @staticmethod
     def remove_site_account(site_id):
         account = Account.query.get(site_id)

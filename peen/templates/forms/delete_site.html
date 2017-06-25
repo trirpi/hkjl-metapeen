@@ -3,7 +3,7 @@
     <label for="site">Site: </label>
     <select name="site" id="site">
         {% for account in hacker.accounts %}
-            <option value="{{ account.id }}">{{ account }}</option>
+            <option value="{{ account.id }}">{{ account.site.full_name }}</option>
         {% endfor %}
     </select><br>
 
