@@ -1,0 +1,12 @@
+<h2>Change weight: </h2>
+<form method="post" name="change_weight" action="{{ url_for('admin.change_weight') }}">
+    <label for="site">Site</label>
+    <select name="site" id="site">
+    {% for site in sites %}
+        <option value="{{ site.id }}">{{ site.full_name }} (current weight: {{ site.weight }})</option>
+    {% endfor %}
+    </select><br>
+    <input name="weight" type="text" placeholder="new weight"><br>
+    <input type="submit" value="change weight">
+    <input name="token_csrf" type="hidden" value="{{ token_csrf }}">
+</form>

@@ -13,6 +13,7 @@
             <th>total score</th>
             <th>accounts info</th>
             <th>edit</th>
+            <th>delete</th>
         </tr>
         {% for hacker in hackers %}
             <tr>
@@ -28,11 +29,14 @@
                         {% endfor %}
                     </table>
                 </td>
-                <td><a href="{{ url_for('admin.edit_hacker', hacker_id=hacker.id) }}">edit</a></td>
+                <td><a href="{{ url_for('admin.edit_hacker', hacker_id=hacker.id) }}"><input type="button" value="edit"></a></td>
+                <td>{% include "forms/delete_hacker.html" %}</td>
             </tr>
         {% endfor %}
     </table>
     {% include "forms/add_hacker.html" %}
+    {% include "forms/change_weight.html" %}
+    {% include "forms/crawl_all.html" %}
 
 </body>
 </html>

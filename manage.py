@@ -5,15 +5,41 @@ import os
 import sys
 import unittest
 
-from crawler.crawler import update_all_scores, update_total_score
+from crawler.actions import update_all_scores, update_total_score
 from peen import db
 from peen.models import User, Hacker, Site
 from tests.test_basic import BasicTestCase
 
 parser = argparse.ArgumentParser(description='Manage HKJL Metapeen application.')
 parser.add_argument('command', metavar='command', type=str, nargs='?', default='run',
-                    help='action to perform (setup, test, crawl)')
+                    help='action to perform (setup, shell, test, crawl)')
 arg = parser.parse_args()
+
+
+def shell():
+    """Create a shell."""
+    import code
+    from peen import create_app
+    app = create_app(os.getenv('FLASK_CONFIG') or 'default')
+    banner = 'Python %s on %s\nApp: %s%s\nInstance: %s' % (
+        sys.version,
+        sys.platform,
+        app.import_name,
+        app.debug and ' [debug]' or '',
+        app.instance_path,
+    )
+    ctx = {}
+
+    # Support the regular Python interpreter startup script if someone
+    # is using it.
+    startup = os.environ.get('PYTHONSTARTUP')
+    if startup and os.path.isfile(startup):
+        with open(startup, 'r') as f:
+            eval(compile(f.read(), startup, 'exec'), ctx)
+
+    ctx.update(app.make_shell_context())
+
+    code.interact(banner=banner, local=ctx)
 
 
 def test():
@@ -110,7 +136,8 @@ def crawl():
 commands = {
     'crawl': crawl,
     'setup': setup,
-    'test': test
+    'test': test,
+    'shell': shell
 }
 
 if __name__ == '__main__':

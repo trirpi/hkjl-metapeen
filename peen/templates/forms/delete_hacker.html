@@ -1,4 +1,3 @@
-<h2>Delete Hacker: </h2>
 <form onsubmit="return confirm('Do you really want to delete the user?');" method="post" name="delete_hacker" action="{{ url_for('admin.delete_hacker', hacker_id=hacker.id) }}">
     <input type="submit" value="delete user">
     <input name="token_csrf" type="hidden" value="{{ token_csrf }}">
