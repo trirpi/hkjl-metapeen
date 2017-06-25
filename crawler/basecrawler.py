@@ -12,7 +12,9 @@ class BaseCrawler(object):
 
     def __init__(self, hacker):
         self.username = hacker.username  # needed to show in error messages
-        self.profile_url = self.get_profile_url(hacker.get_site_account(self.site).specific_username)  # create profile url from username specific to site
+
+        specific_username = hacker.get_site_account(self.site).specific_username
+        self.profile_url = self.get_profile_url(specific_username)  # create profile url from username specific to site
 
     def get_profile_url(self, username):
         """Get url of hacker profile page from specific site."""

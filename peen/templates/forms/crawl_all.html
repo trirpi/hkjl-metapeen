@@ -1,0 +1,5 @@
+<h2>Crawl: </h2>
+<form method="post" name="crawl_all" action="{{ url_for('admin.crawl_all') }}">
+    <input type="submit" value="crawl all sites">
+    <input name="token_csrf" type="hidden" value="{{ token_csrf }}">
+</form>
