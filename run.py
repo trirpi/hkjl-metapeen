@@ -5,7 +5,7 @@ import os
 from peen import create_app
 
 parser = argparse.ArgumentParser(description='Run HKJL Metapeen application.')
-parser.add_argument('--port', dest='port', default=5000,
+parser.add_argument('--port', dest='port', default='5000',
                     help='port to run on')
 parser.add_argument('--host', dest='host', default='127.0.0.1',
                     help='host to bind')

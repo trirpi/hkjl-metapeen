@@ -3,3 +3,5 @@ credentials.py
 *.pyc
 app.db
 *.sqlite
+.vscode
+metapeen-env
